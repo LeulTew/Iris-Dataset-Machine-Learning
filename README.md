@@ -47,7 +47,7 @@ pip install numpy pandas matplotlib seaborn scikit-learn scikit-extra
   3. Plotted decision boundaries and convergence over iterations.
 ---
 
-## Problem #4: Comparing Decision Tree, KNN, and Perceptron
+### Problem #4: Comparing Decision Tree, KNN, and Perceptron
 
 This section focuses on comparing three different classification algorithms: Decision Tree, K-Nearest Neighbors (KNN), and Perceptron, using the Iris dataset.
 
@@ -84,7 +84,7 @@ This section focuses on comparing three different classification algorithms: Dec
 
 ---
 
-## Problem #5: K-Means Clustering and Visualization
+### Problem #5: K-Means Clustering and Visualization
 
 This problem focuses on applying K-Means clustering to the Iris dataset and visualizing the results.
 
@@ -109,7 +109,7 @@ This problem focuses on applying K-Means clustering to the Iris dataset and visu
 
 ---
 
-## Problem #6: K-Medoids Clustering and Comparison with K-Means
+### Problem #6: K-Medoids Clustering and Comparison with K-Means
 
 This problem extends the clustering analysis by comparing K-Means with K-Medoids clustering.
 
