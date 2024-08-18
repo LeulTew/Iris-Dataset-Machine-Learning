@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Enhanced Custom Decision Tree Visualization for Sepal Features
+    </title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      #container {
+        text-align: center;
+      }
+      canvas {
+        border: 1px solid #000;
+        background-color: #fff;
+      }
+      #controls {
+        margin-top: 20px;
+      }
+      input {
+        width: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h2>Enhanced Custom Decision Tree for Iris Species</h2>
+      <canvas id="decisionTreeCanvas" width="400" height="400"></canvas>
+      <div id="controls">
+        <label for="sepalLength"
+          >Sepal Length: <span id="sepalLengthValue">5.5</span> cm</label
+        ><br />
+        <input
+          type="range"
+          id="sepalLength"
+          min="4.0"
+          max="8.0"
+          step="0.1"
+          value="5.5"
+        /><br />
+        <label for="sepalWidth"
+          >Sepal Width: <span id="sepalWidthValue">3.0</span> cm</label
+        ><br />
+        <input
+          type="range"
+          id="sepalWidth"
+          min="2.0"
+          max="4.5"
+          step="0.1"
+          value="3.0"
+        /><br />
+        <p id="result">Species: Pending</p>
+      </div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("decisionTreeCanvas");
+      const ctx = canvas.getContext("2d");
+      const sepalLengthSlider = document.getElementById("sepalLength");
+      const sepalWidthSlider = document.getElementById("sepalWidth");
+      const sepalLengthValue = document.getElementById("sepalLengthValue");
+      const sepalWidthValue = document.getElementById("sepalWidthValue");
+      const resultText = document.getElementById("result");
+
+      function drawDecisionRegions() {
+        for (let x = 0; x < 400; x++) {
+          for (let y = 0; y < 400; y++) {
+            const sepalLength = x / 100 + 4; // scaling for sepal length
+            const sepalWidth = 4.5 - y / 200; // scaling for sepal width
+            const species = classifyIris(sepalLength, sepalWidth);
+            ctx.fillStyle = getColor(species);
+            ctx.fillRect(x, y, 1, 1);
+          }
+        }
+      }
+
+      function getColor(species) {
+        switch (species) {
+          case "Setosa":
+            return "rgba(255, 0, 0, 0.5)"; // Red for Setosa
+          case "Versicolor":
+            return "rgba(0, 255, 0, 0.5)"; // Green for Versicolor
+          case "Virginica":
+            return "rgba(0, 0, 255, 0.5)"; // Blue for Virginica
+          default:
+            return "#fff";
+        }
+      }
+
+      function drawAxes() {
+        ctx.strokeStyle = "#000";
+        ctx.beginPath();
+        ctx.moveTo(0, 400);
+        ctx.lineTo(400, 400);
+        ctx.moveTo(0, 400);
+        ctx.lineTo(0, 0);
+        ctx.stroke();
+
+        ctx.fillStyle = "#000";
+        ctx.font = "12px Arial";
+        for (let i = 4; i <= 8; i++) {
+          const x = (i - 4) * 100;
+          ctx.fillText(i, x, 415);
+        }
+        for (let i = 2; i <= 4.5; i += 0.5) {
+          const y = 400 - (i - 2) * 200;
+          ctx.fillText(i.toFixed(1), -25, y);
+        }
+
+        ctx.font = "14px Arial";
+        ctx.fillText("Sepal Length (cm)", 150, 430);
+        ctx.save();
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText("Sepal Width (cm)", -250, 20);
+        ctx.restore();
+      }
+
+      function drawPoint(x, y) {
+        ctx.fillStyle = "#000";
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      function classifyIris(sepalLength, sepalWidth) {
+        if (sepalLength < 5.45) {
+          if (sepalWidth < 2.8) {
+            if (sepalLength < 4.7) {
+              return "Setosa";
+            } else if (sepalLength < 5.35) {
+              return "Setosa";
+            } else {
+              return "Versicolor";
+            }
+          } else {
+            return "Setosa";
+          }
+        } else if (sepalLength < 6.15) {
+          if (sepalWidth < 3.7) {
+            return "Versicolor";
+          } else {
+            return "Setosa";
+          }
+        } else {
+          if (sepalLength < 7.05) {
+            return "Virginica";
+          } else {
+            return "Virginica";
+          }
+        }
+      }
+
+      function updateVisualization() {
+        const sepalLength = parseFloat(sepalLengthSlider.value);
+        const sepalWidth = parseFloat(sepalWidthSlider.value);
+
+        sepalLengthValue.textContent = sepalLength.toFixed(1);
+        sepalWidthValue.textContent = sepalWidth.toFixed(1);
+
+        const x = (sepalLength - 4) * 100;
+        const y = 400 - (sepalWidth - 2) * 200;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawDecisionRegions();
+        drawAxes();
+        drawPoint(x, y);
+
+        const species = classifyIris(sepalLength, sepalWidth);
+        resultText.textContent = `Species: ${species}`;
+      }
+
+      sepalLengthSlider.addEventListener("input", updateVisualization);
+      sepalWidthSlider.addEventListener("input", updateVisualization);
+
+      updateVisualization();
+    </script>
+  </body>
+</html>
