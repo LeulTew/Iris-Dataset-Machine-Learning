@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perceptron Learning Algorithm Visualization</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .plot {
+        width: 100%;
+        height: 500px;
+      }
+      .controls {
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Perceptron Learning Algorithm Visualization</h1>
+
+    <h2>Decision Boundary</h2>
+    <div id="decisionBoundary" class="plot"></div>
+
+    <h2>Number of Updates Over Epochs</h2>
+    <div id="updatesOverEpochs" class="plot"></div>
+
+    <div class="controls">
+      <button onclick="runEpochs()">Run Epochs</button>
+      <button onclick="resetPlot()">Reset</button>
+    </div>
+
+    <script>
+      // Decision Boundary data
+      var trace1 = {
+        x: [4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9],
+        y: [3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1],
+        mode: "markers",
+        type: "scatter",
+        name: "Setosa",
+        marker: { size: 12, symbol: "square", color: "red" },
+      };
+
+      var trace2 = {
+        x: [7.0, 6.4, 6.9, 5.5, 6.5, 5.7, 6.3, 4.9, 6.6],
+        y: [3.2, 3.2, 3.1, 2.3, 2.8, 2.8, 3.3, 2.4, 2.9],
+        mode: "markers",
+        type: "scatter",
+        name: "Versicolor",
+        marker: { size: 12, symbol: "triangle-up", color: "blue" },
+      };
+
+      var layout1 = {
+        title: "Perceptron Decision Boundary",
+        xaxis: { title: "Sepal Length [Standardized]" },
+        yaxis: { title: "Sepal Width [Standardized]" },
+        shapes: [
+          {
+            type: "line",
+            x0: 4.5,
+            y0: 2.5,
+            x1: 7.5,
+            y1: 3.5,
+            line: {
+              color: "green",
+              width: 3,
+              dash: "dash",
+            },
+          },
+        ],
+      };
+
+      Plotly.newPlot("decisionBoundary", [trace1, trace2], layout1);
+
+      // Number of Updates Over Epochs data
+      var trace3 = {
+        x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        y: [6, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        type: "scatter",
+        mode: "lines+markers",
+        name: "Updates",
+        line: { color: "purple" },
+      };
+
+      var layout2 = {
+        title: "Number of Updates Over Epochs",
+        xaxis: { title: "Epochs" },
+        yaxis: { title: "Number of Updates (Errors)" },
+      };
+
+      Plotly.newPlot("updatesOverEpochs", [trace3], layout2);
+
+      function runEpochs() {
+        var x = trace3.x;
+        var y = trace3.y;
+
+        // Increase the number of updates by 10 for each epoch up to 10 epochs
+        for (var i = x.length + 1; i <= 10; i++) {
+          x.push(i);
+          y.push(y[y.length - 1] + 10); // Increase by 10
+        }
+
+        Plotly.update("updatesOverEpochs", { x: [x], y: [y] });
+      }
+
+      function resetPlot() {
+        trace3.x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        trace3.y = [6, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        Plotly.newPlot("updatesOverEpochs", [trace3], layout2);
+      }
+    </script>
+  </body>
+</html>
